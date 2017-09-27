@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}{{mailbox.name}}{% endblock %}
+{% block header %}<a href="{{url_for('index')}}">{{mailbox.name}}</a>{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-offset-3 col-md-6">
+        {% include '_showflash.html' %}
+        <div class="post-list">
+            {% for bill in bills.items %}
+            <div class="post-item">
+                <h4><a href="{{url_for('view_bill', slug=bill.slug)}}">{{bill.issuer}} {{bill.due_date.strftime('%d-%m-%Y')}}</a></h4>
+                <div class="text-muted">Added by {{bill.author.fullname}} on {{bill.post_date.strftime('%d-%m-%Y')}}</div>
+                In category {{bill.cat_rel.name}}.  {% if bill.pdf %}|  <a href="{{bill.pdf_src}}">View bill</a>{% endif %}
+                <hr />
+            </div>
+            {% endfor %}
+        </div>
+        <div class="post-paginate">
+            {% if bills.has_prev %}
+            <a href="{{url_for('public', page=bills.prev_num, slug=mailbox.public_slug)}}">&lt;&lt; Newer</a>
+            {% else %}
+            &lt;&lt; Newer
+            {% endif %} |
+            {% if bills.has_next %}
+            <a href="{{url_for('public', page=bills.next_num, slug=mailbox.public_slug)}}">&gt;&gt; Older</a>
+            {% else %}
+            Older &gt;&gt;
+            {% endif %}
+            {% if session.get('username')%}  |
+            <a href="{{url_for('logout')}}"> Logout</a>
+            {% endif %}
+            {% if session.get('is_author')%}  |
+            <a href="{{url_for('admin')}}"> Admin</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

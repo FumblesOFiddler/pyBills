@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}{{view.issuer + ' ' + view.post_date.strftime('%d/%m/%Y')}}{% endblock %}
+{% block header %}{{view.issuer + ' - ' + view.post_date.strftime('%d/%m/%Y')}}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-offset-3 col-md-6">
+        <h2>${{view.amount}}</h2>
+        <h3>Issued by {{view.issuer}}. Due on {{view.due_date.strftime('%d/%m/%Y')}}.</h3>
+        <h3>Category: {{view.cat_rel.name}}  {% if view.pdf %}|  <a href="{{view.pdf_src}}">View bill</a>{% endif %}</h3>
+    </div>
+</div>
+{% endblock %}
